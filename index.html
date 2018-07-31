@@ -7,16 +7,22 @@
 <body>
 <h1>Simple Slides Demo</h1>
 <div id="simple-slides">
-    <div class="slide" id="slide1" data-next-class="btn" data-prev-class="btn">
+    <div class="slide" id="slide1" data-next-class="btn" data-prev-class="btn" data-slide-title="Intro">
         <h2>This is the first slide.</h2>
-        <p>Be sure to set class and id attributes.</p>
+        <p>
+            Be sure to set class and id attributes. 
+            The class name that specifies a simple-slides slide can be defined in the conf.json file (coming soon).
+        </p>
+        <p>
+            "data-slide-title" (optional) can be used to give each slide a title, which is necessary to render a table of contents/index.
+        </p>
     </div>
-    <div class="slide" id="slide2" data-next-class="btn" data-prev-class="btn">
+    <div class="slide" id="slide2" data-next-class="btn" data-prev-class="btn" data-slide-title="Custom Attributes (pt 1)">
         <h2>This is the second slide.</h2>
         <p>The "data-next-class" and "data-prev-class" attributes can be used to specify the classes to add to the respective buttons.</p>
         <p>This demo utilizes Bootstrap.</p>
     </div>
-    <div class="slide" id="slide3" data-jump-to="slide5" data-button-text="Jump to Slide 5" data-button-class="btn" data-prev-class="btn">
+    <div class="slide" id="slide3" data-jump-to="slide5" data-button-text="Jump to Slide 5" data-button-class="btn" data-prev-class="btn" data-slide-title="Custom Attributes (pt 2)">
         <h2>data-jump-to</h2>
         <p>The "data-jump-to" attribute overwrites "next" button with a slide of our choosing.</p>
         <p>The attribute "data-button-text" sets the button's text.</p>
@@ -53,6 +59,7 @@
     </div>
     <div class="slide" id="slide7" data-next-class="btn" data-prev-class="btn">
         <h2>Multi-slide form (pt 2)</h2>
+        <p>Step-by-step wizards can be created this way, and validation libraries can be added as normal.</p>
         <div>
             <label for="input3">Input3</label>
             <input name="input3" type="text" data-submit-form="form1">
@@ -64,8 +71,14 @@
         <button class="slide-button btn" data-submit-form="form1" data-submit-action="displayJson">Submit Form</button>
         <div id="form-results"></div>
     </div>
-
-    <div class="slide" id="slide8" data-prev-class="btn">
+    <div class="slide" id="slide8" data-prev-class="btn" data-next-class="btn">
+        <h2>Table of Contents</h2>
+        <p>To display buttons leading to every slide, create a block element with the class defined in the conf.json file. The default is "table-of-contents".</p>
+        <p>Simple-slides will use the string value of certain attributes to add text to the button in this hierarchical order: "data-title-slide" -> "name" -> "id"</p>
+        <p>Define the class for every button within the table of contents element with the "data-button-class" attribute (i.e., one class for all of the slides' buttons).</p>
+        <div class="table-of-contents" data-button-class="btn"></div>
+    </div>
+    <div class="slide" id="slide9" data-prev-class="btn">
         <h2>Hardcoded buttons</h2>
         <p>Custom buttons can be added to any slide, and the "data-jump-to" attribute is used to specify the id of the slide the button jumps to.</p>
         <button class="slide-button btn" data-jump-to="slide1">Go back to beginning</button>
