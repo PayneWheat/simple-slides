@@ -5,6 +5,7 @@ let slideClassName = ".slide";
 let buttonClassName = ".slide-button";
 let displayType = "block";
 let showSlideNumber = true;
+let tocElementsClassName = ".table-of-contents"
 
 let slideShow = document.querySelector("#simple-slides");
 
@@ -149,5 +150,22 @@ for(i = 0; i < buttonArr.length; i++) {
             document.querySelector("#form-results").innerHTML = JSON.stringify(formObjArr);
             // else if slideshow is configured to POST form data...
         });
+    }
+}
+
+let tocElements = slideShow.querySelectorAll(tocElementsClassName);
+if(tocElements.length > 0) {
+    for(i = 0; i < tocElements.length; i++) {
+        for(j = 0; j < slideArr.length; j++) {
+            let tempButton = document.createElement("BUTTON");
+            tempButton.setAttribute("class", "toc-button");
+            let slideName = slideArr[j].getAttribute("data-slide-title") || slideArr[j].getAttribute("name") || slideArr[j].id;
+            tempButton.appendChild(document.createTextNode(slideName));
+            if(tocElements[i].hasAttribute("data-button-class")) {
+                tempButton.setAttribute("class", tocElements[i].getAttribute("data-button-class"));
+            }
+            // TODO: add click event listener
+            tocElements[i].appendChild(tempButton);
+        }
     }
 }
