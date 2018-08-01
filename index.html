@@ -10,22 +10,31 @@
     <div class="slide" id="slide1" data-next-class="btn" data-prev-class="btn" data-slide-title="Intro">
         <h2>This is the first slide.</h2>
         <p>
+<<<<<<< HEAD
+            Be sure to set <code>class</code> and <code>id</code> attributes of the slide's container. The default class is "slide" (i.e. <code>... class="slide" ...</code>)
+            Optionally, this class name can be altered in the conf.json file (coming soon).
+        </p>
+        <p>
+            <code>data-slide-title</code> (optional) can be used to give each slide a title. This comes in handy for the table of contents generator and the tab navigation setting.
+            A more thorough explanation can be found later in this slideshow.
+=======
             Be sure to set class and id attributes. 
             The class name that specifies a simple-slides slide can be defined in the conf.json file (coming soon).
         </p>
         <p>
             "data-slide-title" (optional) can be used to give each slide a title, which is necessary to render a table of contents/index.
+>>>>>>> a2a9292... Table of contents
         </p>
     </div>
     <div class="slide" id="slide2" data-next-class="btn" data-prev-class="btn" data-slide-title="Custom Attributes (pt 1)">
         <h2>This is the second slide.</h2>
-        <p>The "data-next-class" and "data-prev-class" attributes can be used to specify the classes to add to the respective buttons.</p>
+        <p>The <code>data-next-class</code> and <code>data-prev-class</code> attributes can be used to specify the classes to add to the respective buttons.</p>
         <p>This demo utilizes Bootstrap.</p>
     </div>
     <div class="slide" id="slide3" data-jump-to="slide5" data-button-text="Jump to Slide 5" data-button-class="btn" data-prev-class="btn" data-slide-title="Custom Attributes (pt 2)">
         <h2>data-jump-to</h2>
-        <p>The "data-jump-to" attribute overwrites "next" button with a slide of our choosing.</p>
-        <p>The attribute "data-button-text" sets the button's text.</p>
+        <p>The <code>data-jump-to</code> attribute overwrites the "next" button with a slide of our choosing.</p>
+        <p>The attribute <code>data-button-text</code> sets the button's text.</p>
     </div>
     <div class="slide" id="slide4" data-next-class="btn" data-prev-class="btn">
         <h2>This slide is skipped</h2>
@@ -33,20 +42,22 @@
     <div class="slide" id="slide5" data-next-class="btn" data-jump-back="slide3" data-button-text="Go Back to Slide 3" data-button-class="btn">
         <h2>data-jump-back</h2>
         <p>You skipped the fourth slide</p>
-        <p>The "data-jump-back" attribute overwrites the typical "prev" button with a slide of our choosing.</p>
-        <p>The attribute "data-button-text" sets the button's text.</p>
+        <p>The <code>data-jump-back</code> attribute overwrites the "prev" button to jump back to a slide of our choosing.</p>
+        <p>The value for <code>data-jump-back</code> should correspond with the <code>id</code> attribute of the slide we wish to appear. "slide3" in this example.</p>
+        <p>The attribute <code>data-button-text</code> sets the button's text.</p>
     </div>
 
     <div class="slide" id="slide6" data-next-class="btn" data-prev-class="btn">
         <h2>Multi-slide form (pt 1)</h2>
         <p>
-            Forms can be created without the traditional 'form' tag and can span multiple slides.
+            Forms can be created without the traditional form tag and can span multiple slides.
             The resulting values can either be POST-ed to a defined action (a la the standard form attribute)
-            or the values can form a JSON object (is that redundant?) for API use or for custom controllers.
+            or the values can form a JSON object (is that redundant?) for API use or custom controllers.
         </p>
         <p>
             Multiple forms can be applied to a single slide show by utilizing the "data-submit-form" attribute
             in both the input element and the button element that is responsible for submitting the form.
+            Their values must match for the form data to be populated into a single object. "form1" in this example.
         </p>
         <div>
             <label for="input1">Input1</label>
@@ -60,6 +71,11 @@
     <div class="slide" id="slide7" data-next-class="btn" data-prev-class="btn">
         <h2>Multi-slide form (pt 2)</h2>
         <p>Step-by-step wizards can be created this way, and validation libraries can be added as normal.</p>
+<<<<<<< HEAD
+        <p>For demonstration purposes, submitting this form will output the JSON string in a div below.</p>
+        <p>However, wrapping the whole slideshow in a form element is a perfectly acceptable way to implement a form if preferential (or neccesary) .</p>
+=======
+>>>>>>> a2a9292... Table of contents
         <div>
             <label for="input3">Input3</label>
             <input name="input3" type="text" data-submit-form="form1">
@@ -75,17 +91,33 @@
         <h2>Table of Contents</h2>
         <p>To display buttons leading to every slide, create a block element with the class defined in the conf.json file. The default is "table-of-contents".</p>
         <p>Simple-slides will use the string value of certain attributes to add text to the button in this hierarchical order: "data-title-slide" -> "name" -> "id"</p>
+<<<<<<< HEAD
+        <p>Add a class value for every button within the table of contents with the "data-button-class" attribute (i.e., one class for all of the slides' buttons).</p>
+        <div class="table-of-contents" data-button-class="btn"></div>
+    </div>
+    <div class="slide" id="slide9" data-next-class="btn" data-prev-class="btn">
+=======
         <p>Define the class for every button within the table of contents element with the "data-button-class" attribute (i.e., one class for all of the slides' buttons).</p>
         <div class="table-of-contents" data-button-class="btn"></div>
     </div>
     <div class="slide" id="slide9" data-prev-class="btn">
+>>>>>>> a2a9292... Table of contents
         <h2>Hardcoded buttons</h2>
         <p>Custom buttons can be added to any slide, and the "data-jump-to" attribute is used to specify the id of the slide the button jumps to.</p>
         <button class="slide-button btn" data-jump-to="slide1">Go back to beginning</button>
         <button class="slide-button btn" data-jump-to="slide2">Go to the second slide</button>
         <button class="slide-button btn" data-jump-to="slide3">Go to the third slide</button>
         <button class="slide-button btn" data-jump-to="slide6">Go to the sixth slide</button>
-        <p>This is also the last slide, so it should not have a 'next' button</p>
+    </div>
+    <div class="slide" id="slide10" data-timed-slide="3.5">
+        <h2>Timed slides</h2>
+        <p>Automatic transitions to the next sequential slide can be enabled with the "data-timed-slide" attribute.</p>
+        <p>The value of this attribute can be a floating point number or integer, representing the number of seconds before transitioning.</p>
+    </div>
+    <div class="slide" id="slide11" data-prev-class="btn">
+        <h2>Circular configuration</h2>
+        <p>The slideshow can be configured to be circular, i.e. the last slide will transition back to the first slide. This can be accomplished with the <code>data-jump-to</code> attribute.</p>
+        <p>This is particularly useful for sliders.</p>
     </div>
 </div>
 <script src="js/simpleslides.js"></script>

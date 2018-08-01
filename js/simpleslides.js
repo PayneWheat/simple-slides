@@ -5,21 +5,31 @@ let slideClassName = ".slide";
 let buttonClassName = ".slide-button";
 let displayType = "block";
 let showSlideNumber = true;
+let tocElementsClassName = ".table-of-contents";
+<<<<<<< HEAD
+=======
 let tocElementsClassName = ".table-of-contents"
+>>>>>>> a2a9292... Table of contents
+=======
+>>>>>>> 900cb02... Missed a conflict
 
 let slideShow = document.querySelector("#simple-slides");
-
+console.log(slideShow);
 let slideArr = slideShow.querySelectorAll(slideClassName);
+console.log(slideArr);
 for(i = 0; i < slideArr.length; i++) {
-    // create button container
-    let buttonContainer = document.createElement("DIV");
-    buttonContainer.setAttribute("class", "slide-buttons-container");
-    // display the first sequential slide
+    // display the first sequential slide, hide the rest
     if(i == 0) {
         slideArr[i].style.display = displayType;
     } else {
         slideArr[i].style.display = "none";
     }
+}
+
+for(i = 0; i < slideArr.length; i++) {
+    // create button container
+    let buttonContainer = document.createElement("DIV");
+    buttonContainer.setAttribute("class", "slide-buttons-container");
     // check for special cases (jumps to specific slides, etc)
     // if standard case, create next/prev buttons for each page
     if(i > 0 && !slideArr[i].hasAttribute("data-jump-back")) {
@@ -28,10 +38,11 @@ for(i = 0; i < slideArr.length; i++) {
         let tempText = document.createTextNode("Previous");
         tempButton.appendChild(tempText);
         // check for data-prev-class attribute
+        let classes = "prev-slide-button";
         if(slideArr[i].hasAttribute("data-prev-class")) {
-            let classes = slideArr[i].getAttribute("data-prev-class");
-            tempButton.setAttribute("class", classes);
+            classes += " " + slideArr[i].getAttribute("data-prev-class");
         }
+        tempButton.setAttribute("class", classes);
         // add event listeners to button
         tempButton.addEventListener("click", function(e) {
             // hide current slide
@@ -39,14 +50,22 @@ for(i = 0; i < slideArr.length; i++) {
             // display previous slide
             e.target.parentElement.parentElement.previousElementSibling.style.display = displayType;
         });
+        
         // append button to slide
-        buttonContainer.appendChild(tempButton);
+        if(!slideArr[i].hasAttribute("data-timed-slide")) {
+            buttonContainer.appendChild(tempButton);
+        }
     }
-    if(slideArr[i].hasAttribute("data-jump-back") && slideArr[i].hasAttribute("data-button-text")) {
+    if(slideArr[i].hasAttribute("data-jump-back")) {
         // previous button replaced with specified jump-back slide ID.
         let tempButton = document.createElement("BUTTON");
-        let tempText = document.createTextNode(slideArr[i].getAttribute("data-button-text"));
+        if(slideArr[i].hasAttribute("data-button-text")) {
+            tempText = document.createTextNode(slideArr[i].getAttribute("data-button-text"));
+        } else {
+            tempText = document.createTextNode("Previous");
+        }
         tempButton.appendChild(tempText);
+        tempButton.setAttribute("data-jump-back", slideArr[i].getAttribute("data-jump-back"))
         tempButton.addEventListener("click", function(e) {
             // search slideshow for specified slide
             let quer = e.target.parentElement.parentElement.getAttribute("data-jump-back");
@@ -57,12 +76,13 @@ for(i = 0; i < slideArr.length; i++) {
             // show jump-back slide
             jumpSlide.style.display = displayType;
         });
-        buttonContainer.appendChild(tempButton);
-        
+
+        let classes = "prev-slide-button";
         if(slideArr[i].hasAttribute("data-button-class")) {
-            let classes = slideArr[i].getAttribute("data-button-class");
-            tempButton.setAttribute("class", classes);
+            classes += " " + slideArr[i].getAttribute("data-button-class");
         }
+        tempButton.setAttribute("class", classes);
+        buttonContainer.appendChild(tempButton);
     }  
     
     if(i < slideArr.length - 1 && !slideArr[i].hasAttribute("data-jump-to")) {
@@ -75,14 +95,28 @@ for(i = 0; i < slideArr.length; i++) {
             e.target.parentElement.parentElement.style.display = "none";
             // display next slide
             e.target.parentElement.parentElement.nextElementSibling.style.display = displayType;
+            
+            var nextSlide =  e.target.parentElement.parentElement.nextElementSibling;
+            if(e.target.parentElement.parentElement.nextElementSibling.hasAttribute("data-timed-slide")) {
+                setTimeout(function(ns = nextSlide) {
+                    console.log("NEXT SLIDE");
+                    console.log(ns);
+                    ns.style.display = "none";
+                    ns.nextElementSibling.style.display = displayType;
+                }, Math.round(parseFloat(e.target.parentElement.parentElement.nextElementSibling.getAttribute("data-timed-slide")) * 1000));
+            }
         });
         // check for data-next-class attribute
-        if(slideArr[i].hasAttribute("data-next-class")) {
-            let classes = slideArr[i].getAttribute("data-next-class");
+        if(!slideArr[i].hasAttribute("data-timed-slide")) {
+            let classes = "next-slide-button";
+            if(slideArr[i].hasAttribute("data-next-class")) {
+                classes += " " + slideArr[i].getAttribute("data-next-class");
+            }
             tempButton.setAttribute("class", classes);
-        }       
-        buttonContainer.appendChild(tempButton);
+            buttonContainer.appendChild(tempButton);
+        }
     }
+
     if(slideArr[i].hasAttribute("data-jump-to") && slideArr[i].hasAttribute("data-button-text")) {
         // next button replaced with specified jump-to slide 
         let tempButton = document.createElement("BUTTON");
@@ -96,12 +130,14 @@ for(i = 0; i < slideArr.length; i++) {
             e.target.parentElement.parentElement.style.display = "none";
             jumpSlide.style.display = displayType;
         });
+        let classes = "next-slide-button";
         if(slideArr[i].hasAttribute("data-button-class")) {
-            let classes = slideArr[i].getAttribute("data-prev-class");
-            tempButton.setAttribute("class", classes);
-        }        
+            classes += " " + slideArr[i].getAttribute("data-prev-class");
+        }
+        tempButton.setAttribute("class", classes);
         buttonContainer.appendChild(tempButton);
     }
+
     // add slide number to button container if configured to do so
     if(showSlideNumber == true) {
         let slideNumber = document.createElement("DIV");
