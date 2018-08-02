@@ -7,14 +7,28 @@ let displayType = "block";
 let showSlideNumber = true;
 let tocElementsClassName = ".table-of-contents";
 
+let slideHistory = [];
 let slideShow = document.querySelector("#simple-slides");
-console.log(slideShow);
 let slideArr = slideShow.querySelectorAll(slideClassName);
-console.log(slideArr);
+
+function popSlideHistory() {
+    console.log("Removing slide from history.");
+    slideHistory.shift();
+    console.log(slideHistory);
+}
+function pushSlideHistory(slide) {
+    console.log("Adding slide to history.")
+    console.log(slide);
+    slideHistory.unshift(slide);
+    console.log(slideHistory);
+}
+
 for(i = 0; i < slideArr.length; i++) {
     // display the first sequential slide, hide the rest
     if(i == 0) {
         slideArr[i].style.display = displayType;
+        //slideHistory.unshift(slideArr[i]);
+        //pushSlideHistory(slideArr[i]);
     } else {
         slideArr[i].style.display = "none";
     }
@@ -26,6 +40,7 @@ for(i = 0; i < slideArr.length; i++) {
     buttonContainer.setAttribute("class", "slide-buttons-container");
     // check for special cases (jumps to specific slides, etc)
     // if standard case, create next/prev buttons for each page
+    
     if(i > 0 && !slideArr[i].hasAttribute("data-jump-back")) {
         // standard case for previous button
         let tempButton = document.createElement("BUTTON");
@@ -39,18 +54,43 @@ for(i = 0; i < slideArr.length; i++) {
         tempButton.setAttribute("class", classes);
         // add event listeners to button
         tempButton.addEventListener("click", function(e) {
+            // define previous slide
+            let prevSlide = slideHistory[0];
+            console.log("prevSlide: ");
+            console.log(prevSlide);
             // hide current slide
             e.target.parentElement.parentElement.style.display = "none";
+            popSlideHistory();
             // display previous slide
-            e.target.parentElement.parentElement.previousElementSibling.style.display = displayType;
+            //e.target.parentElement.parentElement.previousElementSibling.style.display = displayType;
+            prevSlide.style.display = displayType;
+
+            if(prevSlide.hasAttribute("data-timed-slide")) {
+                let to = parseFloat(prevSlide.getAttribute("data-timed-slide"));
+                console.log(to);
+                setTimeout(function() {
+                    console.log("PREV SLIDE");
+                    console.log(prevSlide);
+                    prevSlide.style.display = "none";
+                    prevSlide.nextElementSibling.style.display = displayType;
+                    //slideHistory.unshift(slideHistory[0].nextElementSibling.style.display);
+                    let tempSlide = prevSlide.nextElementSibling;
+                    pushSlideHistory(prevSlide);
+                }, Math.round(to * 1000));
+            }
         });
-        
+        // if previous slide was a timed slide, 
+        // call setTimeout upon clicking current slide's previous button
+
         // append button to slide
         if(!slideArr[i].hasAttribute("data-timed-slide")) {
             buttonContainer.appendChild(tempButton);
         }
+
+
     }
-    if(slideArr[i].hasAttribute("data-jump-back")) {
+
+    if(i > 0 && slideArr[i].hasAttribute("data-jump-back")) {
         // previous button replaced with specified jump-back slide ID.
         let tempButton = document.createElement("BUTTON");
         if(slideArr[i].hasAttribute("data-button-text")) {
@@ -69,6 +109,8 @@ for(i = 0; i < slideArr.length; i++) {
             e.target.parentElement.parentElement.style.display = "none";
             // show jump-back slide
             jumpSlide.style.display = displayType;
+            //slideHistory.shift();
+            popSlideHistory();
         });
 
         let classes = "prev-slide-button";
@@ -87,19 +129,24 @@ for(i = 0; i < slideArr.length; i++) {
         tempButton.addEventListener("click", function(e) {
             // hide current slide
             e.target.parentElement.parentElement.style.display = "none";
+            pushSlideHistory(e.target.parentElement.parentElement);
             // display next slide
             e.target.parentElement.parentElement.nextElementSibling.style.display = displayType;
-            
+            //slideHistory.unshift(e.target.parentElement.parentElement.nextElementSibling);
             var nextSlide =  e.target.parentElement.parentElement.nextElementSibling;
-            if(e.target.parentElement.parentElement.nextElementSibling.hasAttribute("data-timed-slide")) {
+            
+            if(nextSlide.hasAttribute("data-timed-slide")) {
                 setTimeout(function(ns = nextSlide) {
                     console.log("NEXT SLIDE");
                     console.log(ns);
                     ns.style.display = "none";
                     ns.nextElementSibling.style.display = displayType;
+                    //slideHistory.unshift(ns.nextElementSibling);
+                    pushSlideHistory(ns);
                 }, Math.round(parseFloat(e.target.parentElement.parentElement.nextElementSibling.getAttribute("data-timed-slide")) * 1000));
             }
         });
+
         // check for data-next-class attribute
         if(!slideArr[i].hasAttribute("data-timed-slide")) {
             let classes = "next-slide-button";
@@ -122,7 +169,10 @@ for(i = 0; i < slideArr.length; i++) {
             quer = "#" + quer;
             let jumpSlide = e.target.parentElement.parentElement.parentElement.querySelector(quer);
             e.target.parentElement.parentElement.style.display = "none";
+            pushSlideHistory(e.target.parentElement.parentElement);
             jumpSlide.style.display = displayType;
+            //slideHistory.unshift(jumpSlide);
+            
         });
         let classes = "next-slide-button";
         if(slideArr[i].hasAttribute("data-button-class")) {
