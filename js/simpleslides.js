@@ -5,11 +5,7 @@ let slideClassName = ".slide";
 let buttonClassName = ".slide-button";
 let displayType = "block";
 let showSlideNumber = true;
-<<<<<<< HEAD
 let tocElementsClassName = ".table-of-contents";
-=======
-let tocElementsClassName = ".table-of-contents"
->>>>>>> a2a9292da5889c0de7f72391933a9d0c76c78a95
 
 let slideShow = document.querySelector("#simple-slides");
 console.log(slideShow);
