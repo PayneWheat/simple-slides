@@ -7,11 +7,14 @@ let displayType = "block";
 let showSlideNumber = true;
 let tocElementsClassName = ".table-of-contents";
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 let tocElementsClassName = ".table-of-contents"
 >>>>>>> a2a9292... Table of contents
 =======
 >>>>>>> 900cb02... Missed a conflict
+=======
+>>>>>>> 900cb029af7f4c3c6a03cf5d42c5ac7c911c880f
 
 let slideShow = document.querySelector("#simple-slides");
 console.log(slideShow);
