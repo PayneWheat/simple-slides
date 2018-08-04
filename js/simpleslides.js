@@ -102,10 +102,6 @@ for(i = 0; i < slideArr.length; i++) {
         tempButton.addEventListener("click", function(e) {
             // search slideshow for specified slide
             let jumpSlideId = e.target.parentElement.parentElement.getAttribute("data-jump-back");
-            /*
-            jumpSlideId = "#" + jumpSlideId;
-            let jumpSlide = e.target.parentElement.parentElement.parentElement.querySelector(jumpSlideId);
-            */
             let jumpSlide = findSlide(jumpSlideId);
             // hide current slide
             e.target.parentElement.parentElement.style.display = "none";
@@ -125,31 +121,31 @@ for(i = 0; i < slideArr.length; i++) {
     
     if(i < slideArr.length - 1 && !slideArr[i].hasAttribute("data-jump-to")) {
         // standard case for next button
-        tempButton = document.createElement("BUTTON");
-        tempText = document.createTextNode("Next");
-        tempButton.appendChild(tempText);
-        tempButton.addEventListener("click", function(e) {
-            // hide current slide
-            e.target.parentElement.parentElement.style.display = "none";
-            pushSlideHistory(e.target.parentElement.parentElement);
-            // display next slide
-            e.target.parentElement.parentElement.nextElementSibling.style.display = displayType;
-            var nextSlide =  e.target.parentElement.parentElement.nextElementSibling;
-            
-            if(nextSlide.hasAttribute("data-timed-slide")) {
-                setTimeout(function(ns = nextSlide) {
-                    console.log("NEXT SLIDE");
-                    console.log(ns);
-                    ns.style.display = "none";
-                    ns.nextElementSibling.style.display = displayType;
-                    //slideHistory.unshift(ns.nextElementSibling);
-                    pushSlideHistory(ns);
-                }, Math.round(parseFloat(e.target.parentElement.parentElement.nextElementSibling.getAttribute("data-timed-slide")) * 1000));
-            }
-        });
-
-        // check for data-next-class attribute
+        // check if the buttons should be rendered.
         if(!slideArr[i].hasAttribute("data-timed-slide")) {
+            tempButton = document.createElement("BUTTON");
+            tempText = document.createTextNode("Next");
+            tempButton.appendChild(tempText);
+            tempButton.addEventListener("click", function(e) {
+                // hide current slide
+                e.target.parentElement.parentElement.style.display = "none";
+                pushSlideHistory(e.target.parentElement.parentElement);
+                // display next slide
+                e.target.parentElement.parentElement.nextElementSibling.style.display = displayType;
+                var nextSlide =  e.target.parentElement.parentElement.nextElementSibling;
+                
+                if(nextSlide.hasAttribute("data-timed-slide")) {
+                    setTimeout(function(ns = nextSlide) {
+                        console.log("NEXT SLIDE");
+                        console.log(ns);
+                        ns.style.display = "none";
+                        ns.nextElementSibling.style.display = displayType;
+                        //slideHistory.unshift(ns.nextElementSibling);
+                        pushSlideHistory(ns);
+                    }, Math.round(parseFloat(e.target.parentElement.parentElement.nextElementSibling.getAttribute("data-timed-slide")) * 1000));
+                }
+            });
+            // check for data-next-class attribute
             let classes = "next-slide-button";
             if(slideArr[i].hasAttribute("data-next-class")) {
                 classes += " " + slideArr[i].getAttribute("data-next-class");
@@ -196,13 +192,14 @@ for(i = 0; i < buttonArr.length; i++) {
     // jump to the specified slide (id attribute) when event is triggered
     if(buttonArr[i].hasAttribute("data-jump-to")) {
         buttonArr[i].addEventListener("click", function(e) {
-            let jumpSlide = e.target.getAttribute("data-jump-to");
+            let jumpSlideId = e.target.getAttribute("data-jump-to");
             // hide current slide
             e.target.parentElement.style.display = "none";
             // prepend "#" to the slide id for querySelector
-            jumpSlide = "#" + jumpSlide;
+            //jumpSlide = "#" + jumpSlide;
+            let jumpSlide = findSlide(jumpSlideId);
             // show jump slide
-            slideShow.querySelector(jumpSlide).style.display = displayType;
+            jumpSlide.style.display = displayType;
         });
     }
     // check for form submission button
@@ -228,6 +225,7 @@ for(i = 0; i < buttonArr.length; i++) {
             // if slideshow is configured to create a JSON object from form data...
             document.querySelector("#form-results").innerHTML = JSON.stringify(formObjArr);
             // else if slideshow is configured to POST form data...
+            // TODO: AJAX controller
         });
     }
 }
@@ -254,6 +252,13 @@ if(tocElements.length > 0) {
                 let jumpSlide = findSlide(slideId);
                 curSlide.style.display = "none";
                 jumpSlide.style.display = displayType;
+                if(jumpSlide.hasAttribute("data-timed-slide")) {
+                    setTimeout(function() {
+                        jumpSlide.style.display = "none";
+                        jumpSlide.nextElementSibling.style.display = displayType;
+                        pushSlideHistory(jumpSlide);
+                    }, parseFloat(jumpSlide.getAttribute("data-timed-slide")) * 1000);
+                }
                 pushSlideHistory(curSlide);
             });
 
