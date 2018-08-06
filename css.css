@@ -8,12 +8,15 @@ div {
     width: 900px;
 }
 .slide {
+    padding: 10px;
     width: 800px;
     border: 10px solid #F4911E;
     padding: 25px;
     margin: 25px;
 }
-
+.table-of-contents{
+    width: 750px;
+}
 .btn {
     background-color: #EB6E1F; 
     border: none;
