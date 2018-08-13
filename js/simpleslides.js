@@ -47,43 +47,41 @@ for(i = 0; i < slideArr.length; i++) {
     // if standard case, create next/prev buttons for each page
     
     if(i > 0 && !slideArr[i].hasAttribute("data-jump-back")) {
-        // standard case for previous button
-        let tempButton = document.createElement("BUTTON");
-        let tempText = document.createTextNode("Previous");
-        tempButton.appendChild(tempText);
-        
-        // check for data-prev-class attribute
-        let classes = "prev-slide-button";
-        if(slideArr[i].hasAttribute("data-prev-class")) {
-            classes += " " + slideArr[i].getAttribute("data-prev-class");
-        }
-        tempButton.setAttribute("class", classes);
-       
-        // add event listener to button
-        tempButton.addEventListener("click", function(e) {
-            // define previous slide
-            let prevSlide = slideHistory[0];
-            // hide current slide
-            e.target.parentElement.parentElement.style.display = "none";
-            popSlideHistory();
-            // display previous slide
-            prevSlide.style.display = displayType;
-
-            if(prevSlide.hasAttribute("data-timed-slide")) {
-                let to = parseFloat(prevSlide.getAttribute("data-timed-slide"));
-                setTimeout(function() {
-                    prevSlide.style.display = "none";
-                    prevSlide.nextElementSibling.style.display = displayType;
-                    //let tempSlide = prevSlide.nextElementSibling;
-                    pushSlideHistory(prevSlide);
-                }, Math.round(to * 1000));
-            }
-        });
-        // if previous slide was a timed slide, 
-        // call setTimeout upon clicking current slide's previous button
-
         // append button to slide (if not otherwise configured)
         if(!slideArr[i].hasAttribute("data-timed-slide")) {
+            // standard case for previous button
+            let tempButton = document.createElement("BUTTON");
+            let tempText = document.createTextNode("Previous");
+            tempButton.appendChild(tempText);
+        
+            // add event listener to button
+            tempButton.addEventListener("click", function(e) {
+                // define previous slide
+                let prevSlide = slideHistory[0];
+                // hide current slide
+                e.target.parentElement.parentElement.style.display = "none";
+                popSlideHistory();
+                // display previous slide
+                prevSlide.style.display = displayType;
+
+                if(prevSlide.hasAttribute("data-timed-slide")) {
+                    let to = parseFloat(prevSlide.getAttribute("data-timed-slide"));
+                    setTimeout(function() {
+                        prevSlide.style.display = "none";
+                        prevSlide.nextElementSibling.style.display = displayType;
+                        //let tempSlide = prevSlide.nextElementSibling;
+                        pushSlideHistory(prevSlide);
+                    }, Math.round(to * 1000));
+                }
+            });
+            // check for data-prev-class attribute
+            let classes = "prev-slide-button";
+            if(slideArr[i].hasAttribute("data-prev-class")) {
+                classes += " " + slideArr[i].getAttribute("data-prev-class");
+            }
+            tempButton.setAttribute("class", classes);
+            // if previous slide was a timed slide, 
+            // call setTimeout upon clicking current slide's previous button
             buttonContainer.appendChild(tempButton);
         }
     
@@ -176,14 +174,16 @@ for(i = 0; i < slideArr.length; i++) {
         tempButton.setAttribute("class", classes);
         buttonContainer.appendChild(tempButton);
     }
+    slideArr[i].appendChild(buttonContainer);
 
     // add slide number to button container if configured to do so
     if(showSlideNumber == true) {
         let slideNumber = document.createElement("DIV");
         slideNumber.appendChild(document.createTextNode((i + 1) + "/" + slideArr.length));
-        buttonContainer.appendChild(slideNumber);
+        slideNumber.setAttribute("class", "slide-number");
+        slideArr[i].appendChild(slideNumber);
     }
-    slideArr[i].appendChild(buttonContainer);
+    
 }
 
 let buttonArr = document.querySelectorAll(buttonClassName);
@@ -236,16 +236,16 @@ if(tocElements.length > 0) {
         for(j = 0; j < slideArr.length; j++) {
             
             let tempButton = document.createElement("BUTTON");
-            tempButton.setAttribute("class", "toc-button");
+            //tempButton.setAttribute("class", "toc-button");
             tempButton.setAttribute("data-jump-to", slideArr[j].id);
             
             let slideName = slideArr[j].getAttribute("data-slide-title") || slideArr[j].getAttribute("name") || slideArr[j].id;
             tempButton.appendChild(document.createTextNode(slideName));
-            
+            let classes = "toc-button";
             if(tocElements[i].hasAttribute("data-button-class")) {
-                tempButton.setAttribute("class", tocElements[i].getAttribute("data-button-class"));
+                classes += " " + tocElements[i].getAttribute("data-button-class");
             }
-
+            tempButton.setAttribute("class", classes);
             tempButton.addEventListener("click", function(e) {
                 let curSlide = e.target.parentElement.parentElement;
                 let slideId = e.target.getAttribute("data-jump-to");
